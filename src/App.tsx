@@ -1,5 +1,7 @@
+import Cronometro from "./components/Cronometro";
+
 function App() {
-  return <div>Hola mundo</div>;
+  return <Cronometro pausado={true}></Cronometro>;
 }
 
 export default App;
