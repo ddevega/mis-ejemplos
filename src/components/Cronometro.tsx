@@ -1,10 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 type Props = { pausado: boolean };
 
 const Cronometro = ({ pausado }: Props) => {
   const [decimas, setDecimas] = useState(0);
   const [segundos, setSegundos] = useState(0);
   const [minutos, setMinutos] = useState(0);
+  const [funcionando, setFuncionando] = useState(!pausado);
+
+  const handleClickInicio = () => {
+    setFuncionando(!funcionando);
+  };
+
+  const handleClickReseteo = () => {
+    setDecimas(0);
+    setMinutos(0);
+    setSegundos(0);
+  };
+
+  useEffect(() => {
+    let intervalID: number | undefined;
+    if (funcionando) {
+      intervalID = setInterval(() => {
+        if (decimas < 9) {
+          setDecimas((prevDec) => prevDec + 1);
+        } else if (decimas == 9 && segundos < 59) {
+          setDecimas(0);
+          setSegundos((prevSeg) => prevSeg + 1);
+        } else if (decimas == 9 && segundos == 59) {
+          setDecimas(0);
+          setSegundos(0);
+          setMinutos((prevMin) => prevMin + 1);
+        }
+      }, 100);
+    } else {
+      clearInterval(intervalID);
+    }
+    return () => {
+      clearInterval(intervalID);
+    };
+  }, [decimas, segundos, minutos, funcionando]);
+
   return (
     <div>
       <h1>Cronómetro</h1>
@@ -13,9 +48,11 @@ const Cronometro = ({ pausado }: Props) => {
         <span>{segundos > 9 ? segundos : "0" + segundos}</span>:
         <span>{decimas}</span>
         <br />
-        <button>Iniciar/Parar</button>
+        <button onClick={handleClickInicio}>
+          {funcionando ? "Parar" : "Iniciar"}
+        </button>
         <br />
-        <button>Resetear</button>
+        <button onClick={handleClickReseteo}>Resetear</button>
       </h3>
     </div>
   );

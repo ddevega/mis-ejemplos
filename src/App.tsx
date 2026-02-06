@@ -1,7 +1,7 @@
 import Cronometro from "./components/Cronometro";
 
 function App() {
-  return <Cronometro pausado={true}></Cronometro>;
+  return <Cronometro pausado={false}></Cronometro>;
 }
 
 export default App;
